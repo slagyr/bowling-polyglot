@@ -14,3 +14,9 @@ A demonstration of TDD in multiple languages.
     cd java
     mvn test
 ```
+
+## Typescript
+```bash
+    cd typescript
+    npm run test
+```

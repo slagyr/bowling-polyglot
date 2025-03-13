@@ -63,6 +63,13 @@ public class GameTest {
         assertEquals(150, game.score());
     }
 
+    @Test
+    public void heartBreaker() throws Exception {
+        rollMany(11, 10);
+        game.roll(9);
+        assertEquals(299, game.score());
+    }
+
     private void rollMany(int rolls, int pins) {
         for(int i = 0; i < rolls; i++) {
             game.roll(pins);
