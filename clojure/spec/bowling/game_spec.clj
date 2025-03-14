@@ -41,13 +41,13 @@
       (with-redefs [notify-frame (stub :notify-frame)]
         (score (take 20 (repeat 1)) :test)
         (should-have-invoked :notify-frame {:times 10})
-        (should= [[2] [4] [6] [8] [10] [12] [14] [16] [18] [20]] (stub/invocations-of :notify-frame))))
+        (should= [2 4 6 8 10 12 14 16 18 20] (map second (stub/invocations-of :notify-frame)))))
 
     (it "is notified of the score at each frame - perfect game"
       (with-redefs [notify-frame (stub :notify-frame)]
         (score (take 12 (repeat 10)) :test)
         (should-have-invoked :notify-frame {:times 10})
-        (should= [[30] [60] [90] [120] [150] [180] [210] [240] [270] [300]] (stub/invocations-of :notify-frame))))
+        (should= [30 60 90 120 150 180 210 240 270 300] (map second (stub/invocations-of :notify-frame)))))
 
     )
 
