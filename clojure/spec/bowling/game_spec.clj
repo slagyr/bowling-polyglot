@@ -1,5 +1,6 @@
 (ns bowling.game-spec
   (:require [speclj.core :refer :all]
+            [speclj.stub :as stub]
             [bowling.game :refer :all]))
 
 (describe "Bowling game"
@@ -23,5 +24,24 @@
 
   (it "heart breaker"
     (should= 299 (score (concat (take 11 (repeat 10)) [9]))))
+
+
+  (context "frame observer"
+
+    (with-stubs)
+
+    (it "is notified of the score at each frame - all 1s"
+      (with-redefs [notify-frame (stub :notify-frame)]
+        (score (take 20 (repeat 1)) :test)
+        (should-have-invoked :notify-frame {:times 10})
+        (should= [[2] [4] [6] [8] [10] [12] [14] [16] [18] [20]] (stub/invocations-of :notify-frame))))
+
+    (it "is notified of the score at each frame - perfect game"
+      (with-redefs [notify-frame (stub :notify-frame)]
+        (score (take 12 (repeat 10)) :test)
+        (should-have-invoked :notify-frame {:times 10})
+        (should= [[30] [60] [90] [120] [150] [180] [210] [240] [270] [300]] (stub/invocations-of :notify-frame))))
+
+    )
 
   )

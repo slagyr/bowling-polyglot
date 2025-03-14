@@ -13,7 +13,13 @@ public class Game {
         rolls[rollIndex++] = pins;
     }
 
+
     public int score() {
+        // By default, we call score with a NullFrameObserver.
+        return score(new NullFrameObserver());
+    }
+
+    public int score(FrameObserver observer) {
         int score = 0;
         int roll = 0;
         for(int frame = 0; frame < 10; frame++) {
@@ -27,6 +33,7 @@ public class Game {
                 score += scoreFrame(roll);
                 roll += 2;
             }
+            observer.notify(score);
         }
         return score;
     }
@@ -50,4 +57,5 @@ public class Game {
     private boolean isSpare(int roll) {
         return scoreFrame(roll) == 10;
     }
+
 }

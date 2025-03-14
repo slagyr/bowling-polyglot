@@ -18,11 +18,18 @@
 (defn score-strike [score rolls]
   (+ score 10 (+ (second rolls) (nth rolls 2))))
 
-(defn score [rolls]
-  (loop [frame 1 score 0 rolls rolls]
-    (if (> frame 10)
-      score
-      (let [frame (inc frame)]
-        (cond (strike? rolls) (recur frame (score-strike score rolls) (drop 1 rolls))
-              (spare? rolls) (recur frame (score-spare score rolls) (drop 2 rolls))
-              :else (recur frame (score-frame score rolls) (drop 2 rolls)))))))
+(defmulti notify-frame identity)
+(defmethod notify-frame :default [_frame-score] #_do-nothing)
+
+(defn score
+  ([rolls] (score rolls nil))
+  ([rolls observer]
+   (loop [frame 1 score 0 rolls rolls]
+     (when (> frame 1)
+       (notify-frame score))
+     (if (> frame 10)
+       score
+       (let [frame (inc frame)]
+         (cond (strike? rolls) (recur frame (score-strike score rolls) (drop 1 rolls))
+               (spare? rolls) (recur frame (score-spare score rolls) (drop 2 rolls))
+               :else (recur frame (score-frame score rolls) (drop 2 rolls))))))))
