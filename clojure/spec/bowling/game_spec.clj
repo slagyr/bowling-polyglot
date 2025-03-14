@@ -8,12 +8,20 @@
   (it "gutter game"
     (should= 0 (score [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0])))
 
-  (it "all 1 pins"
+  (it "1 pin"
+    (let [rolls (concat [1] (take 19 (repeat 0)))]
+      (should= 1 (score rolls))))
+
+  (it "all 1s"
     (should= 20 (score (take 20 (repeat 1)))))
 
   (it "a spare"
     (let [rolls (concat [5 5 5] (take 17 (repeat 0)))]
       (should= 20 (score rolls))))
+
+  (it "all 5s"
+    (let [rolls (take 21 (repeat 5))]
+      (should= 150 (score rolls))))
 
   (it "a strike"
     (let [rolls (concat [10 4 5] (take 16 (repeat 0)))]
@@ -24,7 +32,6 @@
 
   (it "heart breaker"
     (should= 299 (score (concat (take 11 (repeat 10)) [9]))))
-
 
   (context "frame observer"
 
