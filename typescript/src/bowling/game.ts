@@ -1,13 +1,20 @@
-// src/bowling/game.ts
+import {FrameObserver} from "./frame_observer";
+import {NullFrameObserver} from "./null_frame_observer";
+
 export class Game {
-    private rolls: number[] = new Array(21).fill(0); // Pre-filled array for simplicity
+    private rolls: number[] = new Array(21).fill(0);
     private rollIndex: number = 0;
 
     public roll(pins: number): void {
         this.rolls[this.rollIndex++] = pins;
     }
 
-    public score(): number {
+    public score(): number;
+    public score(observer: FrameObserver): number;
+    public score(observer?: FrameObserver): number {
+        if (observer == undefined) {
+            observer = new NullFrameObserver();
+        }
         let score = 0;
         let roll = 0;
         for (let frame = 0; frame < 10; frame++) {
@@ -21,6 +28,7 @@ export class Game {
                 score += this.scoreFrame(roll);
                 roll += 2;
             }
+            observer.notify(score);
         }
         return score;
     }
